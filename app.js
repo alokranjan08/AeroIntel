@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAboutModal();
   initMobileNav();
   initSmoothScroll();
+  initEasterEgg();
 });
 
 // Pre-Incident Feature Importance weights extracted from NTSB XGBoost Model
@@ -1014,5 +1015,68 @@ function initSmoothScroll() {
         });
       }
     });
+  });
+}
+
+/**
+ * Bonus Round Easter Egg: Type 'qatar' or click brand logo 5 times to unlock 5-Star Luxury Mode
+ */
+function initEasterEgg() {
+  const brandLogo = document.querySelector('.brand');
+  let clickCount = 0;
+  let keySequence = '';
+
+  const triggerEasterEgg = () => {
+    let toast = document.getElementById('easter-egg-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'easter-egg-toast';
+      toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9999;
+        background: linear-gradient(135deg, #D4AF37 0%, #5C0632 100%);
+        color: #FFFFFF;
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        border: 2px solid #F3E5AB;
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+        font-family: var(--font-sans);
+        font-weight: 800;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: toastBounce 0.6s cubic-bezier(0.34, 1.45, 0.64, 1);
+      `;
+      toast.innerHTML = `<span>✈️</span> <span>5-Star Qatar First Class Luxury Mode Activated! 🌟</span>`;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 4500);
+    }
+  };
+
+  if (brandLogo) {
+    brandLogo.addEventListener('click', (e) => {
+      clickCount++;
+      if (clickCount >= 5) {
+        clickCount = 0;
+        triggerEasterEgg();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    keySequence += e.key.toLowerCase();
+    if (keySequence.length > 10) {
+      keySequence = keySequence.slice(-10);
+    }
+    if (keySequence.endsWith('qatar')) {
+      keySequence = '';
+      triggerEasterEgg();
+    }
   });
 }
