@@ -1974,3 +1974,92 @@ select option {
     text-align: center;
   }
 }
+
+/* NTSB Investigation Case Study Graphics (Replaces stock airline photos) */
+.case-graphic-wrapper {
+  position: relative;
+  height: 220px;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.weather-graphic {
+  background: linear-gradient(135deg, rgba(92, 6, 50, 0.9) 0%, rgba(15, 3, 14, 0.95) 100%), radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.35), transparent 70%);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.construction-graphic {
+  background: linear-gradient(135deg, rgba(65, 20, 45, 0.9) 0%, rgba(11, 3, 10, 0.95) 100%), radial-gradient(circle at 70% 30%, rgba(212, 175, 55, 0.35), transparent 70%);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.purpose-graphic {
+  background: linear-gradient(135deg, rgba(40, 10, 50, 0.9) 0%, rgba(8, 2, 8, 0.95) 100%), radial-gradient(circle at 50% 70%, rgba(59, 130, 246, 0.35), transparent 70%);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.case-graphic-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 5;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-card:hover .case-graphic-content {
+  transform: scale(1.08) translateY(-4px);
+}
+
+.graphic-icon {
+  font-size: 2.75rem;
+  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+}
+
+.graphic-stat {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--qatar-gold);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+}
+
+.graphic-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+.modal-graphic-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2A061B 0%, #0B030A 100%);
+  border-right: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 2rem;
+}
+
+.modal-case-graphic {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.graphic-icon.large {
+  font-size: 4rem;
+}
+
+.graphic-stat.large {
+  font-size: 3.5rem;
+}
+

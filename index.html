@@ -31,8 +31,8 @@
         <ul class="nav-links" id="nav-links">
           <li><a href="#hero" class="nav-link">Scenario Analyzer</a></li>
           <li><a href="#intelligence" class="nav-link">Intelligence</a></li>
-          <li><a href="#gallery" class="nav-link">Fleet & Gallery</a></li>
-          <li><a href="#showcase" class="nav-link">Product</a></li>
+          <li><a href="#gallery" class="nav-link">Case Studies</a></li>
+          <li><a href="#showcase" class="nav-link">Console Demo</a></li>
           <li><a href="#explorer" class="nav-link">Dataset & Code Preview</a></li>
           <li><a href="#methodology" class="nav-link">Methodology</a></li>
           <li><a href="#about" class="nav-link nav-link-about" id="nav-about-me">About Me</a></li>
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <!-- Hero Right: Interactive Booking-Style Scenario Card -->
+      <!-- Hero Right: Interactive Scenario Analyzer Card -->
       <div class="card" id="scenario-card">
         <div class="card-header">
           <h2 class="card-title">
@@ -240,55 +240,67 @@
     </div>
   </section>
 
-  <!-- Aviation Experience & Fleet Gallery Section -->
+  <!-- NTSB Investigation Case Studies Section (Replaces stock airline photos) -->
   <section class="section" id="gallery">
     <div class="container">
       
       <div class="section-header">
-        <h2 class="section-title">World-Class Aviation Intelligence</h2>
+        <h2 class="section-title">NTSB Incident Analysis Case Studies</h2>
         <p class="section-subtitle">
-          Click any card to launch interactive telemetry view and full-screen resolution inspection.
+          Click any card to inspect pre-flight risk benchmarks derived from 39,017 historical NTSB investigations.
         </p>
       </div>
 
       <div class="gallery-grid">
         
-        <!-- Image Card 1: Commercial Aircraft in Flight -->
+        <!-- Case Study 1: Weather Risk -->
         <div class="gallery-card" data-gallery-id="fleet" role="button" tabindex="0">
-          <div class="gallery-img-wrapper">
-            <img src="hero_airplane.jpg" alt="Commercial Airplane in Flight at Sunset" class="gallery-img">
-            <div class="gallery-badge">COMMERCIAL FLEET</div>
-            <div class="gallery-hover-overlay">🔍 Click to Inspect Telemetry</div>
+          <div class="gallery-img-wrapper case-graphic-wrapper weather-graphic">
+            <div class="case-graphic-content">
+              <div class="graphic-icon">🌩️</div>
+              <div class="graphic-stat">3.4x</div>
+              <div class="graphic-label">IMC Fatality Multiplier</div>
+            </div>
+            <div class="gallery-badge">WEATHER RISK ANALYSIS</div>
+            <div class="gallery-hover-overlay">🔍 Click to Inspect Benchmark</div>
           </div>
           <div class="gallery-content">
-            <h3 class="gallery-title">Golden Hour Flight Telemetry</h3>
-            <p class="gallery-desc">Analyzing 39,017 historical incident characteristics across general and commercial aviation fleets.</p>
+            <h3 class="gallery-title">Instrument Meteorological Conditions</h3>
+            <p class="gallery-desc">Instrument weather (IMC) is the single highest risk factor in aviation safety, carrying a 3.4x higher fatality multiplier than visual weather.</p>
           </div>
         </div>
 
-        <!-- Image Card 2: Luxury Flight Cabin -->
+        <!-- Case Study 2: Construction Risk -->
         <div class="gallery-card" data-gallery-id="cabin" role="button" tabindex="0">
-          <div class="gallery-img-wrapper">
-            <img src="cabin_suite.jpg" alt="5-Star First Class Cabin Suite" class="gallery-img">
-            <div class="gallery-badge">FIRST CLASS SUITE</div>
-            <div class="gallery-hover-overlay">🔍 Click to Inspect Telemetry</div>
+          <div class="gallery-img-wrapper case-graphic-wrapper construction-graphic">
+            <div class="case-graphic-content">
+              <div class="graphic-icon">🛠️</div>
+              <div class="graphic-stat">18.0%</div>
+              <div class="graphic-label">Amateur-Built Weight</div>
+            </div>
+            <div class="gallery-badge">CONSTRUCTION RISK PROFILE</div>
+            <div class="gallery-hover-overlay">🔍 Click to Inspect Benchmark</div>
           </div>
           <div class="gallery-content">
-            <h3 class="gallery-title">5-Star Passenger Safety Standards</h3>
-            <p class="gallery-desc">Evaluating cabin environmental factors, seat configurations, and injury mitigation thresholds.</p>
+            <h3 class="gallery-title">Amateur-Built vs Factory Fleet</h3>
+            <p class="gallery-desc">Homebuilt aircraft exhibit distinct structural risk characteristics, representing the 2nd highest feature weight (18.0%) in the XGBoost model.</p>
           </div>
         </div>
 
-        <!-- Image Card 3: Modern Glass Cockpit -->
+        <!-- Case Study 3: Flight Purpose -->
         <div class="gallery-card" data-gallery-id="cockpit" role="button" tabindex="0">
-          <div class="gallery-img-wrapper">
-            <img src="cockpit_flight.jpg" alt="Modern Glass Cockpit Flight Deck at Night" class="gallery-img">
-            <div class="gallery-badge">FLIGHT DECK SYSTEM</div>
-            <div class="gallery-hover-overlay">🔍 Click to Inspect Telemetry</div>
+          <div class="gallery-img-wrapper case-graphic-wrapper purpose-graphic">
+            <div class="case-graphic-content">
+              <div class="graphic-icon">✈️</div>
+              <div class="graphic-stat">13.5%</div>
+              <div class="graphic-label">Flight Purpose Weight</div>
+            </div>
+            <div class="gallery-badge">FLIGHT PURPOSE TELEMETRY</div>
+            <div class="gallery-hover-overlay">🔍 Click to Inspect Benchmark</div>
           </div>
           <div class="gallery-content">
-            <h3 class="gallery-title">Pre-Flight Instrument Intelligence</h3>
-            <p class="gallery-desc">Real-time instrument meteorological condition (IMC) risk scoring and weather gradient metrics.</p>
+            <h3 class="gallery-title">Personal vs Commercial Operations</h3>
+            <p class="gallery-desc">Personal flights account for 63% of historical incidents, while multi-engine commercial operations exhibit higher baseline safety margins.</p>
           </div>
         </div>
 
@@ -297,16 +309,19 @@
     </div>
   </section>
 
-  <!-- Interactive Gallery Lightbox Modal -->
+  <!-- Interactive Case Study Modal -->
   <div class="gallery-modal" id="gallery-modal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="gallery-modal-backdrop" id="gallery-modal-backdrop"></div>
     <div class="gallery-modal-card">
       <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="Close modal">✕</button>
       
       <div class="gallery-modal-grid">
-        <div class="gallery-modal-media">
-          <img src="" id="modal-img" alt="Enlarged Telemetry Image" class="modal-img-full">
-          <span class="badge-tag" id="modal-badge">FLEET TELEMETRY</span>
+        <div class="gallery-modal-media modal-graphic-container">
+          <div class="modal-case-graphic" id="modal-graphic-box">
+            <div class="graphic-icon large" id="modal-graphic-icon">🌩️</div>
+            <div class="graphic-stat large" id="modal-graphic-stat">3.4x</div>
+          </div>
+          <span class="badge-tag" id="modal-badge">WEATHER RISK ANALYSIS</span>
         </div>
         
         <div class="gallery-modal-info">
@@ -419,9 +434,9 @@
     <div class="container">
       
       <div class="section-header">
-        <h2 class="section-title">See the intelligence behind the analysis.</h2>
+        <h2 class="section-title">Interactive Model Analytics Console</h2>
         <p class="section-subtitle">
-          An integrated environment bringing together incident telemetry, machine learning predictions, and historical NTSB benchmarks.
+          An integrated demonstration environment bringing together pre-incident risk inference, machine learning performance metrics, and historical NTSB benchmarks.
         </p>
       </div>
 
@@ -434,8 +449,8 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
           </div>
-          <span class="window-title">aerointel.app / analytics-dashboard</span>
-          <span class="badge-tag">v1.0-LIVE</span>
+          <span class="window-title">aerointel / model-analytics-console</span>
+          <span class="badge-tag">PROTOTYPE CONSOLE</span>
         </div>
 
         <div class="dashboard-mockup-grid">
@@ -475,7 +490,7 @@
               </div>
               <div class="metric-pill">
                 <div class="metric-val" style="color: #10B981;">58.5%</div>
-                <div class="metric-lbl">Multiclass Accuracy</div>
+                <div class="metric-lbl">Multiclass Accuracy (2.34x Baseline)</div>
               </div>
             </div>
 
@@ -484,7 +499,7 @@
               <div class="mockup-panel">
                 <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-white); display: flex; justify-content: space-between; align-items: center;">
                   <span>Pre-Incident Scenario Telemetry</span>
-                  <span class="badge-tag" id="console-live-status">LIVE TELEMETRY</span>
+                  <span class="badge-tag" id="console-live-status">INTERACTIVE DEMO</span>
                 </div>
                 <div style="font-size: 0.8rem; color: var(--text-slate); font-family: var(--font-mono); line-height: 1.6;" id="console-telemetry-text">
                   [INPUT]: WeatherCondition: IMC (Bad Weather)<br>
@@ -946,7 +961,7 @@ print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</
         <div class="method-card">
           <h3>ML Model Performance Comparison</h3>
           <p style="font-size: 0.875rem;">
-            Three algorithms were trained and evaluated using SMOTE class balancing and feature scaling.
+            Three algorithms were trained and evaluated using SMOTE class balancing and feature scaling. Multiclass accuracy of 58.5% represents a 2.34x improvement over the 25% random baseline on 4 severity classes.
           </p>
 
           <table class="table-custom">
@@ -1161,8 +1176,8 @@ print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</
             <ul class="footer-col-links">
               <li><a href="#hero">Scenario Analyzer</a></li>
               <li><a href="#intelligence">Intelligence</a></li>
-              <li><a href="#gallery">Fleet & Gallery</a></li>
-              <li><a href="#showcase">Console Product</a></li>
+              <li><a href="#gallery">NTSB Case Studies</a></li>
+              <li><a href="#showcase">Console Demo</a></li>
             </ul>
           </div>
 

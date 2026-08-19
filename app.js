@@ -1,6 +1,6 @@
 /**
  * AeroIntel — Aviation Incident Intelligence
- * Core Engine & Interactive UI Scripts (Qatar Airways 5-Star Luxury Theme + Universal 3D/4D/5D Card Physics)
+ * Core Engine & Interactive UI Scripts (Universal 3D/4D/5D Card Physics & Interactive Model Demo)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +43,7 @@ df_raw = pd.<span class="code-func">read_csv</span>(<span class="code-string">'d
 <span class="code-comment"># Filter U.S. incidents and drop irrelevant metadata</span>
 df = df_raw[df_raw[<span class="code-string">'Country'</span>] == <span class="code-string">'United States'</span>].<span class="code-func">copy</span>()
 drop_cols = [<span class="code-string">'Mkey'</span>, <span class="code-string">'ReportNo'</span>, <span class="code-string">'HasSafetyRec'</span>, <span class="code-string">'OriginalPublishDate'</span>]
-df.<span class="code-func">drop</span>(columns=drop_cols, inplace=<span class="code-string">'True'</span>, errors=<span class="code-string">'ignore'</span>)
+df.<span class="code-func">drop</span>(columns=drop_cols, inplace=<span class="code-string">True</span>, errors=<span class="code-string">'ignore'</span>)
 
 print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</span>)
 <span class="code-comment"># Result: Cleaned U.S. incidents: 39,017 records</span>`,
@@ -116,59 +116,62 @@ joblib.<span class="code-func">dump</span>(label_encoders, <span class="code-str
 print(<span class="code-string">"✓ All ML artifacts saved successfully!"</span>)`
 };
 
-// Gallery Card Telemetry Data for Modal
+// NTSB Investigation Case Study Data for Modal
 const GALLERY_DATA = {
   fleet: {
-    img: 'hero_airplane.jpg',
-    badge: 'COMMERCIAL FLEET TELEMETRY',
-    title: 'Golden Hour Commercial Fleet Telemetry',
-    desc: 'Deep exploratory analysis across 39,017 historical incident records reveals distinct fleet characteristics between commercial multi-engine airliners and general aviation aircraft.',
-    stat1Val: '39,017',
-    stat1Lbl: 'Cleaned NTSB Records',
-    stat2Val: '11.5%',
-    stat2Lbl: 'Aircraft Category Weight',
-    btnText: 'Analyze Multi-Engine Commercial Scenario →',
-    preset: {
-      category: 'Airplane',
-      engines: '2',
-      purpose: 'Positioning',
-      weather: 'VMC',
-      amateur: '0'
-    }
-  },
-  cabin: {
-    img: 'cabin_suite.jpg',
-    badge: 'PASSENGER CABIN SAFETY',
-    title: '5-Star Passenger Cabin Safety Standards',
-    desc: 'Passenger safety evaluation studying injury mitigation, executive flight profiles, and operational parameters across factory-built business fleet configurations.',
-    stat1Val: '55.6%',
-    stat1Lbl: 'No Injury Baseline Rate',
-    stat2Val: '13.5%',
-    stat2Lbl: 'Flight Purpose Importance',
-    btnText: 'Analyze Executive Cabin Risk Profile →',
-    preset: {
-      category: 'Airplane',
-      engines: '2',
-      purpose: 'Executive',
-      weather: 'VMC',
-      amateur: '0'
-    }
-  },
-  cockpit: {
-    img: 'cockpit_flight.jpg',
-    badge: 'FLIGHT DECK INSTRUMENTATION',
-    title: 'Pre-Flight Instrument & Weather Telemetry',
-    desc: 'Instrument Meteorological Conditions (IMC) are the single highest risk factor in aviation safety, carrying a 3.4x higher fatality multiplier than visual flight conditions.',
-    stat1Val: '3.4x',
-    stat1Lbl: 'IMC Fatality Rate Multiplier',
-    stat2Val: '22.8%',
-    stat2Lbl: 'Top XGBoost Feature Weight',
+    icon: '🌩️',
+    stat: '3.4x',
+    badge: 'WEATHER RISK ANALYSIS',
+    title: 'Instrument Meteorological Conditions (IMC)',
+    desc: 'Deep analysis across 39,017 NTSB records shows Instrument Meteorological Conditions (IMC) are the single highest pre-flight risk factor, carrying a 3.4x higher fatality multiplier than visual flight rules.',
+    stat1Val: '22.8%',
+    stat1Lbl: 'Top Feature Weight',
+    stat2Val: '3.4x',
+    stat2Lbl: 'Fatality Multiplier',
     btnText: 'Analyze Bad Weather (IMC) Scenario →',
     preset: {
       category: 'Airplane',
       engines: '1',
       purpose: 'Personal',
       weather: 'IMC',
+      amateur: '0'
+    }
+  },
+  cabin: {
+    icon: '🛠️',
+    stat: '18.0%',
+    badge: 'CONSTRUCTION RISK PROFILE',
+    title: 'Amateur-Built vs Factory Aircraft',
+    desc: 'Homebuilt aircraft represent the 2nd highest pre-incident feature importance (18.0%) in the XGBoost model, exhibiting a 20.0% fatality rate compared to 17.0% for factory-built general aviation aircraft.',
+    stat1Val: '18.0%',
+    stat1Lbl: 'Amateur Feature Weight',
+    stat2Val: '20.0%',
+    stat2Lbl: 'Homebuilt Fatality Rate',
+    btnText: 'Analyze Amateur-Built Risk Profile →',
+    preset: {
+      category: 'Airplane',
+      engines: '1',
+      purpose: 'Personal',
+      weather: 'VMC',
+      amateur: '1'
+    }
+  },
+  cockpit: {
+    icon: '✈️',
+    stat: '13.5%',
+    badge: 'FLIGHT PURPOSE TELEMETRY',
+    title: 'Personal vs Multi-Engine Operations',
+    desc: 'Personal flights account for 63% of historical U.S. incident records. Multi-engine commercial and positioning configurations exhibit higher baseline survival metrics.',
+    stat1Val: '13.5%',
+    stat1Lbl: 'Flight Purpose Weight',
+    stat2Val: '39,017',
+    stat2Lbl: 'Cleaned NTSB Records',
+    btnText: 'Analyze Multi-Engine Scenario →',
+    preset: {
+      category: 'Airplane',
+      engines: '2',
+      purpose: 'Positioning',
+      weather: 'VMC',
       amateur: '0'
     }
   }
@@ -702,7 +705,7 @@ function updateConsoleTelemetry(inputData, result) {
   const liveStatusEl = document.getElementById('console-live-status');
   
   if (liveStatusEl) {
-    liveStatusEl.textContent = 'USER ANALYSIS ACTIVE';
+    liveStatusEl.textContent = 'INTERACTIVE SCENARIO ACTIVE';
     liveStatusEl.style.color = 'var(--qatar-gold)';
     liveStatusEl.style.borderColor = 'var(--qatar-gold)';
   }
@@ -746,7 +749,7 @@ function renderWhySection(features) {
 }
 
 /**
- * Interactive Gallery Lightbox Modal Handler
+ * Interactive NTSB Case Study Lightbox Modal Handler
  */
 function initGalleryModal() {
   const modal = document.getElementById('gallery-modal');
@@ -765,7 +768,11 @@ function initGalleryModal() {
       const data = GALLERY_DATA[galleryId];
       if (!data) return;
 
-      document.getElementById('modal-img').src = data.img;
+      const modalIcon = document.getElementById('modal-graphic-icon');
+      const modalStat = document.getElementById('modal-graphic-stat');
+      if (modalIcon) modalIcon.textContent = data.icon;
+      if (modalStat) modalStat.textContent = data.stat;
+
       document.getElementById('modal-badge').textContent = data.badge;
       document.getElementById('modal-title').textContent = data.title;
       document.getElementById('modal-desc').textContent = data.desc;
@@ -1053,14 +1060,13 @@ function playCabinChime() {
       osc2.stop(ctx.currentTime + 0.7);
     }, 220);
   } catch (e) {
-    // Silent fallback if audio context blocked before gesture
+    // Silent fallback
   }
 }
 
 /**
  * Upgraded Bonus Round Easter Egg:
  * Triggers on typing 'alok', 'aero', 'ntsb', or 'qatar', or clicking brand logo 5 times.
- * Plays authentic 2-tone aircraft cabin chime + spawns golden flight particles + glass toast!
  */
 function initEasterEgg() {
   const brandLogo = document.querySelector('.brand');
@@ -1098,7 +1104,7 @@ function initEasterEgg() {
         <span style="font-size: 1.4rem;">✈️</span>
         <div>
           <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--qatar-gold);">5-Star Flight Deck Activated</div>
-          <div style="font-size: 0.95rem; font-weight: 800;">${triggerWord.toUpperCase()} FIRST CLASS TELEMETRY MODE UNLOCKED 🌟</div>
+          <div style="font-size: 0.95rem; font-weight: 800;">${triggerWord.toUpperCase()} INSIGHT MODE UNLOCKED 🌟</div>
         </div>
       `;
       document.body.appendChild(toast);
