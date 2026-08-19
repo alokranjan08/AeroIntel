@@ -36,4 +36,4 @@ AI tools were used as a pair-programming multiplier:
 
 ---
 
-*Bonus Easter Egg: Type `qatar` on your keyboard or click the AeroIntel brand logo 5 times to unlock 5-Star Luxury Mode!*
+*Bonus Easter Egg: Type `alok`, `aero`, `ntsb`, or `qatar` on your keyboard (or click the AeroIntel brand logo 5 times) to play an authentic aircraft cabin chime and unlock 5-Star First Class Telemetry Mode!*

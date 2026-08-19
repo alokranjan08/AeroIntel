@@ -43,7 +43,7 @@ df_raw = pd.<span class="code-func">read_csv</span>(<span class="code-string">'d
 <span class="code-comment"># Filter U.S. incidents and drop irrelevant metadata</span>
 df = df_raw[df_raw[<span class="code-string">'Country'</span>] == <span class="code-string">'United States'</span>].<span class="code-func">copy</span>()
 drop_cols = [<span class="code-string">'Mkey'</span>, <span class="code-string">'ReportNo'</span>, <span class="code-string">'HasSafetyRec'</span>, <span class="code-string">'OriginalPublishDate'</span>]
-df.<span class="code-func">drop</span>(columns=drop_cols, inplace=<span class="code-string">True</span>, errors=<span class="code-string">'ignore'</span>)
+df.<span class="code-func">drop</span>(columns=drop_cols, inplace=<span class="code-string">'True'</span>, errors=<span class="code-string">'ignore'</span>)
 
 print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</span>)
 <span class="code-comment"># Result: Cleaned U.S. incidents: 39,017 records</span>`,
@@ -1019,64 +1019,124 @@ function initSmoothScroll() {
 }
 
 /**
- * Bonus Round Easter Egg: Type 'qatar' or click brand logo 5 times to unlock 5-Star Luxury Mode
+ * Synthesize Authentic 2-Tone Aircraft Cabin Chime ("Ding-Dong") using Web Audio API
+ */
+function playCabinChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+
+    // High Tone: D5 (587.33 Hz)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.value = 587.33;
+    gain1.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(ctx.currentTime);
+    osc1.stop(ctx.currentTime + 0.5);
+
+    // Low Tone: A4 (440.00 Hz) after 220ms delay
+    setTimeout(() => {
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.value = 440.00;
+      gain2.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime);
+      osc2.stop(ctx.currentTime + 0.7);
+    }, 220);
+  } catch (e) {
+    // Silent fallback if audio context blocked before gesture
+  }
+}
+
+/**
+ * Upgraded Bonus Round Easter Egg:
+ * Triggers on typing 'alok', 'aero', 'ntsb', or 'qatar', or clicking brand logo 5 times.
+ * Plays authentic 2-tone aircraft cabin chime + spawns golden flight particles + glass toast!
  */
 function initEasterEgg() {
   const brandLogo = document.querySelector('.brand');
   let clickCount = 0;
   let keySequence = '';
 
-  const triggerEasterEgg = () => {
+  const triggerEasterEgg = (triggerWord = 'ALOK RANJAN') => {
+    playCabinChime();
+
     let toast = document.getElementById('easter-egg-toast');
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'easter-egg-toast';
       toast.style.cssText = `
         position: fixed;
-        bottom: 2rem;
-        right: 2rem;
+        bottom: 2.5rem;
+        right: 2.5rem;
         z-index: 9999;
-        background: linear-gradient(135deg, #D4AF37 0%, #5C0632 100%);
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.95) 0%, rgba(92, 6, 50, 0.95) 100%);
+        backdrop-filter: blur(16px);
         color: #FFFFFF;
-        padding: 1rem 1.5rem;
-        border-radius: 16px;
+        padding: 1.1rem 1.6rem;
+        border-radius: 20px;
         border: 2px solid #F3E5AB;
-        box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+        box-shadow: 0 10px 45px rgba(212, 175, 55, 0.7), 0 0 20px rgba(92, 6, 50, 0.5);
         font-family: var(--font-sans);
         font-weight: 800;
         font-size: 0.95rem;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 0.85rem;
         animation: toastBounce 0.6s cubic-bezier(0.34, 1.45, 0.64, 1);
       `;
-      toast.innerHTML = `<span>✈️</span> <span>5-Star Qatar First Class Luxury Mode Activated! 🌟</span>`;
+      toast.innerHTML = `
+        <span style="font-size: 1.4rem;">✈️</span>
+        <div>
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--qatar-gold);">5-Star Flight Deck Activated</div>
+          <div style="font-size: 0.95rem; font-weight: 800;">${triggerWord.toUpperCase()} FIRST CLASS TELEMETRY MODE UNLOCKED 🌟</div>
+        </div>
+      `;
       document.body.appendChild(toast);
 
       setTimeout(() => {
-        toast.remove();
-      }, 4500);
+        if (toast) toast.remove();
+      }, 5000);
     }
   };
 
   if (brandLogo) {
-    brandLogo.addEventListener('click', (e) => {
+    brandLogo.addEventListener('click', () => {
       clickCount++;
       if (clickCount >= 5) {
         clickCount = 0;
-        triggerEasterEgg();
+        triggerEasterEgg('AeroIntel');
       }
     });
   }
 
   document.addEventListener('keydown', (e) => {
     keySequence += e.key.toLowerCase();
-    if (keySequence.length > 10) {
-      keySequence = keySequence.slice(-10);
+    if (keySequence.length > 15) {
+      keySequence = keySequence.slice(-15);
     }
-    if (keySequence.endsWith('qatar')) {
+    
+    if (keySequence.endsWith('alok')) {
       keySequence = '';
-      triggerEasterEgg();
+      triggerEasterEgg('Alok Ranjan');
+    } else if (keySequence.endsWith('aero')) {
+      keySequence = '';
+      triggerEasterEgg('AeroIntel');
+    } else if (keySequence.endsWith('ntsb')) {
+      keySequence = '';
+      triggerEasterEgg('NTSB Intelligence');
+    } else if (keySequence.endsWith('qatar')) {
+      keySequence = '';
+      triggerEasterEgg('5-Star Luxury');
     }
   });
 }
