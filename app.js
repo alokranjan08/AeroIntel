@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initUniversal3DTilt();
   initOpposingAirplaneParallax();
   initScenarioAnalyzer();
+  initCheckoutModal();
   initConsoleTabs();
   initExplorerTabs();
   initCodeStepSwitcher();
@@ -632,76 +633,112 @@ function analyzeIncidentScenario(input) {
 /**
  * Handle UI Interaction for Scenario Card & Freemium Premium Lock
  */
+/**
+ * Handle UI Interaction for Scenario Card, Free Limit & Checkout Flow
+ */
 function initScenarioAnalyzer() {
   const form = document.getElementById('scenario-form');
   const resultView = document.getElementById('result-view');
   const btnAnalyze = document.getElementById('btn-analyze');
   const btnReset = document.getElementById('btn-reset');
   const btnUnlock = document.getElementById('btn-unlock-intelligence');
-  const lockWrapper = document.getElementById('premium-lock-wrapper');
-  const lockIcon = document.getElementById('lock-icon');
-  const lockBadge = document.getElementById('premium-badge-tag');
+  const btnLimitPricing = document.getElementById('btn-limit-pricing');
+  const btnPricingCheckout = document.getElementById('btn-pricing-checkout');
 
   if (!form || !resultView) return;
 
+  // Check state on load
+  checkFreeLimitUI();
+
   btnAnalyze.addEventListener('click', (e) => {
     e.preventDefault();
-    triggerAnalysis();
+    handleAnalysisSubmission();
   });
 
   btnReset.addEventListener('click', (e) => {
     e.preventDefault();
     resultView.classList.remove('active');
-    form.classList.remove('hidden');
-
-    if (lockWrapper) {
-      lockWrapper.classList.add('locked');
-      lockWrapper.classList.remove('unlocked');
-    }
-    if (btnUnlock) {
-      btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
-    }
-    if (lockIcon) lockIcon.textContent = '🔒';
-    if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
-
-    document.querySelectorAll('.prob-fill').forEach((el) => {
-      el.style.width = '0%';
-    });
+    
+    // Check if free limit reached
+    checkFreeLimitUI();
   });
 
-  if (btnUnlock && lockWrapper) {
+  if (btnUnlock) {
     btnUnlock.addEventListener('click', () => {
-      if (lockWrapper.classList.contains('locked')) {
-        lockWrapper.classList.remove('locked');
-        lockWrapper.classList.add('unlocked');
-        btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
-        if (lockIcon) lockIcon.textContent = '🔓';
-        if (lockBadge) lockBadge.textContent = 'PREMIUM UNLOCKED';
-
-        // Trigger smooth progress fill animation
-        document.querySelectorAll('.prob-fill').forEach((el) => {
-          const targetWidth = el.getAttribute('data-pct') + '%';
-          el.style.width = targetWidth;
-        });
-
-        // Sound feedback
-        playCabinChime();
+      const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+      if (isUnlocked) {
+        document.getElementById('premium-lock-wrapper')?.scrollIntoView({ behavior: 'smooth' });
       } else {
-        lockWrapper.classList.add('locked');
-        lockWrapper.classList.remove('unlocked');
-        btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
-        if (lockIcon) lockIcon.textContent = '🔒';
-        if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
+        openCheckoutModal();
       }
     });
   }
+
+  if (btnLimitPricing) {
+    btnLimitPricing.addEventListener('click', () => {
+      openCheckoutModal();
+    });
+  }
+
+  if (btnPricingCheckout) {
+    btnPricingCheckout.addEventListener('click', () => {
+      openCheckoutModal();
+    });
+  }
+}
+
+function checkFreeLimitUI() {
+  const form = document.getElementById('scenario-form');
+  const limitBanner = document.getElementById('free-limit-banner');
+  const statusBadge = document.getElementById('scenario-status-badge');
+  const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+  const freeUsed = localStorage.getItem('aeroIntel_freeAnalysisUsed') === 'true';
+
+  if (isUnlocked) {
+    if (limitBanner) limitBanner.classList.add('hidden');
+    if (form) form.classList.remove('hidden');
+    if (statusBadge) {
+      statusBadge.textContent = 'UNLIMITED PREMIUM';
+      statusBadge.style.color = '#10B981';
+      statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    }
+  } else if (freeUsed) {
+    if (limitBanner) limitBanner.classList.remove('hidden');
+    if (form) form.classList.add('hidden');
+    if (statusBadge) {
+      statusBadge.textContent = 'FREE LIMIT REACHED';
+      statusBadge.style.color = '#EF4444';
+      statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+    }
+  } else {
+    if (limitBanner) limitBanner.classList.add('hidden');
+    if (form) form.classList.remove('hidden');
+    if (statusBadge) {
+      statusBadge.textContent = '1 FREE ANALYSIS';
+    }
+  }
+}
+
+function handleAnalysisSubmission() {
+  const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+  const freeUsed = localStorage.getItem('aeroIntel_freeAnalysisUsed') === 'true';
+
+  if (!isUnlocked && freeUsed) {
+    checkFreeLimitUI();
+    return;
+  }
+
+  // Mark 1 free analysis used
+  if (!isUnlocked) {
+    localStorage.setItem('aeroIntel_freeAnalysisUsed', 'true');
+  }
+
+  triggerAnalysis();
 }
 
 function triggerAnalysis() {
   const form = document.getElementById('scenario-form');
   const resultView = document.getElementById('result-view');
-  const lockWrapper = document.getElementById('premium-lock-wrapper');
-  const btnUnlock = document.getElementById('btn-unlock-intelligence');
 
   const inputData = {
     weather: document.getElementById('field-weather').value,
@@ -718,15 +755,6 @@ function triggerAnalysis() {
   updateResultView(result);
   updateConsoleTelemetry(inputData, result);
 
-  // Reset to locked Freemium state on new analysis
-  if (lockWrapper) {
-    lockWrapper.classList.add('locked');
-    lockWrapper.classList.remove('unlocked');
-  }
-  if (btnUnlock) {
-    btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
-  }
-
   form.classList.add('hidden');
   resultView.classList.add('active');
 }
@@ -735,6 +763,12 @@ function updateResultView(result) {
   const banner = document.getElementById('severity-banner');
   const valueEl = document.getElementById('severity-value');
   const chipEl = document.getElementById('severity-confidence-chip');
+  const lockWrapper = document.getElementById('premium-lock-wrapper');
+  const lockTitle = document.getElementById('premium-lock-title');
+  const lockBadge = document.getElementById('premium-badge-tag');
+  const btnUnlock = document.getElementById('btn-unlock-intelligence');
+
+  const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
   
   const sev = result.predictedSeverity.toLowerCase();
   banner.className = `severity-banner ${sev}`;
@@ -753,6 +787,116 @@ function updateResultView(result) {
   setProbRow('none', probs.None);
 
   renderWhySection(result.features);
+
+  if (isUnlocked) {
+    if (lockWrapper) {
+      lockWrapper.classList.remove('locked');
+      lockWrapper.classList.add('unlocked');
+    }
+    if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔓</span> WHY THIS ASSESSMENT?';
+    if (lockBadge) lockBadge.textContent = 'PREMIUM UNLOCKED';
+    if (btnUnlock) btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
+    
+    setTimeout(() => {
+      document.querySelectorAll('.prob-fill').forEach((el) => {
+        const targetWidth = el.getAttribute('data-pct') + '%';
+        el.style.width = targetWidth;
+      });
+    }, 100);
+  } else {
+    if (lockWrapper) {
+      lockWrapper.classList.add('locked');
+      lockWrapper.classList.remove('unlocked');
+    }
+    if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔒</span> Want to know why?';
+    if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
+    if (btnUnlock) btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
+  }
+}
+
+/**
+ * Handle Realistic Checkout Lightbox Modal
+ */
+function initCheckoutModal() {
+  const modal = document.getElementById('checkout-modal');
+  const backdrop = document.getElementById('checkout-modal-backdrop');
+  const closeBtn = document.getElementById('checkout-modal-close');
+  const checkoutForm = document.getElementById('checkout-form');
+  const viewUnlockedBtn = document.getElementById('btn-view-unlocked-intelligence');
+
+  if (!modal) return;
+
+  const closeCheckout = () => {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  };
+
+  backdrop?.addEventListener('click', closeCheckout);
+  closeBtn?.addEventListener('click', closeCheckout);
+
+  checkoutForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const stateForm = document.getElementById('checkout-state-form');
+    const stateProcessing = document.getElementById('checkout-state-processing');
+    const stateSuccess = document.getElementById('checkout-state-success');
+
+    // Step 1 -> Step 2: Processing state
+    stateForm.classList.add('hidden');
+    stateProcessing.classList.remove('hidden');
+
+    // Simulate 1.2s gateway processing delay
+    setTimeout(() => {
+      // Step 2 -> Step 3: Success state
+      stateProcessing.classList.add('hidden');
+      stateSuccess.classList.remove('hidden');
+
+      // Unlock Premium in localStorage
+      localStorage.setItem('aeroIntel_isPremiumUnlocked', 'true');
+
+      playCabinChime();
+    }, 1200);
+  });
+
+  viewUnlockedBtn?.addEventListener('click', () => {
+    closeCheckout();
+
+    // Reset checkout form states for next demo loop
+    document.getElementById('checkout-state-form')?.classList.remove('hidden');
+    document.getElementById('checkout-state-success')?.classList.add('hidden');
+
+    // Update UI and reveal unlocked insights
+    const inputData = {
+      weather: document.getElementById('field-weather').value,
+      purpose: document.getElementById('field-purpose').value,
+      amateur: document.getElementById('field-amateur').value,
+      category: document.getElementById('field-category').value,
+      engines: document.getElementById('field-engines').value,
+      season: document.getElementById('field-season').value,
+      year: document.getElementById('field-year').value,
+      month: document.getElementById('field-month').value
+    };
+    
+    const result = analyzeIncidentScenario(inputData);
+    updateResultView(result);
+
+    checkFreeLimitUI();
+
+    document.getElementById('scenario-card')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+function openCheckoutModal() {
+  const modal = document.getElementById('checkout-modal');
+  if (modal) {
+    // Reset to form state
+    document.getElementById('checkout-state-form')?.classList.remove('hidden');
+    document.getElementById('checkout-state-processing')?.classList.add('hidden');
+    document.getElementById('checkout-state-success')?.classList.add('hidden');
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  }
 }
 
 function updateConsoleTelemetry(inputData, result) {
