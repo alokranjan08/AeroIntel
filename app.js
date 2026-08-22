@@ -629,11 +629,18 @@ function analyzeIncidentScenario(input) {
 /**
  * Handle UI Interaction for Scenario Card & Telemetry Sync
  */
+/**
+ * Handle UI Interaction for Scenario Card & Freemium Premium Lock
+ */
 function initScenarioAnalyzer() {
   const form = document.getElementById('scenario-form');
   const resultView = document.getElementById('result-view');
   const btnAnalyze = document.getElementById('btn-analyze');
   const btnReset = document.getElementById('btn-reset');
+  const btnUnlock = document.getElementById('btn-unlock-intelligence');
+  const lockWrapper = document.getElementById('premium-lock-wrapper');
+  const lockIcon = document.getElementById('lock-icon');
+  const lockBadge = document.getElementById('premium-badge-tag');
 
   if (!form || !resultView) return;
 
@@ -647,15 +654,54 @@ function initScenarioAnalyzer() {
     resultView.classList.remove('active');
     form.classList.remove('hidden');
 
+    if (lockWrapper) {
+      lockWrapper.classList.add('locked');
+      lockWrapper.classList.remove('unlocked');
+    }
+    if (btnUnlock) {
+      btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
+    }
+    if (lockIcon) lockIcon.textContent = '🔒';
+    if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
+
     document.querySelectorAll('.prob-fill').forEach((el) => {
       el.style.width = '0%';
     });
   });
+
+  if (btnUnlock && lockWrapper) {
+    btnUnlock.addEventListener('click', () => {
+      if (lockWrapper.classList.contains('locked')) {
+        lockWrapper.classList.remove('locked');
+        lockWrapper.classList.add('unlocked');
+        btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
+        if (lockIcon) lockIcon.textContent = '🔓';
+        if (lockBadge) lockBadge.textContent = 'PREMIUM UNLOCKED';
+
+        // Trigger smooth progress fill animation
+        document.querySelectorAll('.prob-fill').forEach((el) => {
+          const targetWidth = el.getAttribute('data-pct') + '%';
+          el.style.width = targetWidth;
+        });
+
+        // Sound feedback
+        playCabinChime();
+      } else {
+        lockWrapper.classList.add('locked');
+        lockWrapper.classList.remove('unlocked');
+        btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
+        if (lockIcon) lockIcon.textContent = '🔒';
+        if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
+      }
+    });
+  }
 }
 
 function triggerAnalysis() {
   const form = document.getElementById('scenario-form');
   const resultView = document.getElementById('result-view');
+  const lockWrapper = document.getElementById('premium-lock-wrapper');
+  const btnUnlock = document.getElementById('btn-unlock-intelligence');
 
   const inputData = {
     weather: document.getElementById('field-weather').value,
@@ -672,26 +718,35 @@ function triggerAnalysis() {
   updateResultView(result);
   updateConsoleTelemetry(inputData, result);
 
+  // Reset to locked Freemium state on new analysis
+  if (lockWrapper) {
+    lockWrapper.classList.add('locked');
+    lockWrapper.classList.remove('unlocked');
+  }
+  if (btnUnlock) {
+    btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
+  }
+
   form.classList.add('hidden');
   resultView.classList.add('active');
-
-  setTimeout(() => {
-    document.querySelectorAll('.prob-fill').forEach((el) => {
-      const targetWidth = el.getAttribute('data-pct') + '%';
-      el.style.width = targetWidth;
-    });
-  }, 100);
 }
 
 function updateResultView(result) {
   const banner = document.getElementById('severity-banner');
   const valueEl = document.getElementById('severity-value');
+  const chipEl = document.getElementById('severity-confidence-chip');
   
   const sev = result.predictedSeverity.toLowerCase();
   banner.className = `severity-banner ${sev}`;
   valueEl.textContent = result.predictedSeverity;
 
   const probs = result.probabilities;
+  const highestProb = probs[result.predictedSeverity.charAt(0) + result.predictedSeverity.slice(1).toLowerCase()] || 50;
+
+  if (chipEl) {
+    chipEl.textContent = `${highestProb}% Model Probability`;
+  }
+
   setProbRow('fatal', probs.Fatal);
   setProbRow('serious', probs.Serious);
   setProbRow('minor', probs.Minor);

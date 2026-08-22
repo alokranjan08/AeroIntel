@@ -63,7 +63,7 @@
         <h1 class="hero-title">Understand what makes aviation incidents severe.</h1>
 
         <p class="hero-desc">
-          Explore historical aviation data and use machine learning to analyze pre-incident scenario characteristics associated with severity.
+          Explore historical aviation data and use machine learning to analyze pre-incident scenario characteristics associated with severity. Know the severity. Understand the why.
         </p>
 
         <div class="hero-actions">
@@ -170,69 +170,145 @@
           </button>
         </form>
 
-        <!-- Result State -->
+        <!-- Result State (FREEMIUM PRODUCT EXPERIENCE) -->
         <div class="result-view" id="result-view">
           
-          <div class="severity-banner serious" id="severity-banner">
-            <span class="severity-label">Predicted Incident Severity</span>
-            <span class="severity-value" id="severity-value">SERIOUS</span>
+          <!-- CHANGE 1: FREE USER HIGH-LEVEL RESULT -->
+          <div class="free-result-container">
+            <div class="severity-banner serious" id="severity-banner">
+              <span class="severity-label">PREDICTED INCIDENT SEVERITY</span>
+              <span class="severity-value" id="severity-value">SERIOUS</span>
+              <span class="severity-confidence-chip" id="severity-confidence-chip">54% Model Probability</span>
+            </div>
           </div>
 
-          <div class="probabilities-container">
-            <span class="prob-header">Model Class Probabilities (XGBoost)</span>
+          <!-- CHANGE 2 & 3 & 4 & 5: PREMIUM LOCK & VALUE PROPOSITION -->
+          <div class="premium-lock-wrapper locked" id="premium-lock-wrapper">
             
-            <div class="prob-row">
-              <div class="prob-meta">
-                <span class="prob-name">Fatal</span>
-                <span class="prob-pct" id="prob-pct-fatal">18%</span>
-              </div>
-              <div class="prob-track">
-                <div class="prob-fill fatal" id="prob-fill-fatal"></div>
-              </div>
+            <div class="premium-lock-header">
+              <h3 class="premium-lock-title">
+                <span class="lock-icon" id="lock-icon">🔒</span> Want to know why?
+              </h3>
+              <span class="premium-badge-tag" id="premium-badge-tag">AEROINTEL PREMIUM</span>
             </div>
 
-            <div class="prob-row">
-              <div class="prob-meta">
-                <span class="prob-name">Serious</span>
-                <span class="prob-pct" id="prob-pct-serious">54%</span>
-              </div>
-              <div class="prob-track">
-                <div class="prob-fill serious" id="prob-fill-serious"></div>
-              </div>
-            </div>
+            <!-- BLURRED / LOCKED PREVIEW CONTAINER -->
+            <div class="premium-blurred-content" id="premium-blurred-content">
+              
+              <div class="probabilities-container">
+                <span class="prob-header">Model Class Probabilities (XGBoost)</span>
+                
+                <div class="prob-row">
+                  <div class="prob-meta">
+                    <span class="prob-name">Fatal</span>
+                    <span class="prob-pct" id="prob-pct-fatal">18%</span>
+                  </div>
+                  <div class="prob-track">
+                    <div class="prob-fill fatal" id="prob-fill-fatal"></div>
+                  </div>
+                </div>
 
-            <div class="prob-row">
-              <div class="prob-meta">
-                <span class="prob-name">Minor</span>
-                <span class="prob-pct" id="prob-pct-minor">21%</span>
-              </div>
-              <div class="prob-track">
-                <div class="prob-fill minor" id="prob-fill-minor"></div>
-              </div>
-            </div>
+                <div class="prob-row">
+                  <div class="prob-meta">
+                    <span class="prob-name">Serious</span>
+                    <span class="prob-pct" id="prob-pct-serious">54%</span>
+                  </div>
+                  <div class="prob-track">
+                    <div class="prob-fill serious" id="prob-fill-serious"></div>
+                  </div>
+                </div>
 
-            <div class="prob-row">
-              <div class="prob-meta">
-                <span class="prob-name">None (No Injuries)</span>
-                <span class="prob-pct" id="prob-pct-none">7%</span>
+                <div class="prob-row">
+                  <div class="prob-meta">
+                    <span class="prob-name">Minor</span>
+                    <span class="prob-pct" id="prob-pct-minor">21%</span>
+                  </div>
+                  <div class="prob-track">
+                    <div class="prob-fill minor" id="prob-fill-minor"></div>
+                  </div>
+                </div>
+
+                <div class="prob-row">
+                  <div class="prob-meta">
+                    <span class="prob-name">None (No Injuries)</span>
+                    <span class="prob-pct" id="prob-pct-none">7%</span>
+                  </div>
+                  <div class="prob-track">
+                    <div class="prob-fill none" id="prob-fill-none"></div>
+                  </div>
+                </div>
               </div>
-              <div class="prob-track">
-                <div class="prob-fill none" id="prob-fill-none"></div>
+
+              <!-- Why section -->
+              <div class="why-section">
+                <span class="why-title">Features Influencing Model Assessment (XGBoost)</span>
+                <div class="why-list" id="why-list">
+                  <!-- Dynamically rendered -->
+                </div>
               </div>
-            </div>
+
+            </div> <!-- /.premium-blurred-content -->
+
+            <!-- PREMIUM CONVERSION OVERLAY / CTA BOX -->
+            <div class="premium-cta-card" id="premium-cta-card">
+              <div class="premium-tagline-box">
+                <h4 class="premium-main-heading">Know the severity. Understand the why.</h4>
+                <p class="premium-subtext">Unlock the factors, historical patterns and deeper model insights behind this assessment.</p>
+              </div>
+
+              <!-- WHAT PREMIUM UNLOCKS (CHANGE 4) -->
+              <div class="premium-features-list">
+                <div class="premium-feature-item">
+                  <span class="check-icon">✓</span>
+                  <div>
+                    <strong>Factor Intelligence</strong>
+                    <p>Understand which model features influenced the assessment.</p>
+                  </div>
+                </div>
+                <div class="premium-feature-item">
+                  <span class="check-icon">✓</span>
+                  <div>
+                    <strong>Historical Comparisons</strong>
+                    <p>Explore patterns from similar historical aviation incidents.</p>
+                  </div>
+                </div>
+                <div class="premium-feature-item">
+                  <span class="check-icon">✓</span>
+                  <div>
+                    <strong>Probability Breakdown</strong>
+                    <p>See the model's probability distribution across severity classes.</p>
+                  </div>
+                </div>
+                <div class="premium-feature-item">
+                  <span class="check-icon">✓</span>
+                  <div>
+                    <strong>Deeper Analysis</strong>
+                    <p>Explore additional historical context behind the assessment.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CHANGE 5: PREMIUM PRICING / CTA -->
+              <div class="premium-pricing-box">
+                <div class="pricing-meta">
+                  <span class="plan-name">AeroIntel Intelligence</span>
+                  <span class="plan-price">₹499 <span class="price-period">/ month</span></span>
+                </div>
+                
+                <button type="button" class="btn btn-primary btn-full btn-premium-cta" id="btn-unlock-intelligence">
+                  Unlock AeroIntel Intelligence →
+                </button>
+              </div>
+            </div> <!-- /.premium-cta-card -->
+
+          </div> <!-- /.premium-lock-wrapper -->
+
+          <div style="margin-top: 1rem;">
+            <button type="button" class="btn btn-outline btn-full" id="btn-reset">
+              ← Re-analyze Scenario
+            </button>
           </div>
 
-          <!-- Why section -->
-          <div class="why-section">
-            <span class="why-title">Pre-Incident Feature Importance (XGBoost)</span>
-            <div class="why-list" id="why-list">
-              <!-- Dynamically rendered -->
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-outline btn-full" id="btn-reset">
-            ← Re-analyze Scenario
-          </button>
         </div>
 
       </div>
@@ -240,7 +316,7 @@
     </div>
   </section>
 
-  <!-- NTSB Investigation Case Studies Section (Replaces stock airline photos) -->
+  <!-- NTSB Investigation Case Studies Section -->
   <section class="section" id="gallery">
     <div class="container">
       
@@ -511,7 +587,7 @@
               </div>
 
               <div class="mockup-panel">
-                <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-white);">Pre-Incident Feature Weights</div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-white);">Features Influencing Model Assessment</div>
                 <div style="font-size: 0.75rem; color: var(--text-slate); display: flex; flex-direction: column; gap: 0.45rem;">
                   <div style="display: flex; justify-content: space-between;"><span>WeatherCondition (22.8%)</span><span style="color: var(--qatar-gold);">████████████</span></div>
                   <div style="display: flex; justify-content: space-between;"><span>AmateurBuilt (18.0%)</span><span style="color: var(--qatar-gold);">█████████</span></div>
@@ -999,7 +1075,7 @@ print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</
         <div class="disclaimer-icon">⚠️</div>
         <div class="disclaimer-text">
           <strong>Important operational limitation:</strong><br>
-          This analysis is exploratory and is not a probability of an accident, a safety certification, or an operational flight-safety prediction. It evaluates historical NTSB incident characteristics using machine learning for analytical purposes only.
+          This analysis is exploratory and is not a probability of an accident, a safety certification, or an operational flight-safety prediction. It evaluates historical NTSB incident characteristics using machine learning for analytical purposes only. Feature importance reflects statistical correlation in historical data and does not prove causation.
         </div>
       </div>
 
@@ -1145,7 +1221,7 @@ print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</
       <div class="cta-box">
         <h2 class="section-title">Explore aviation intelligence.</h2>
         <p class="section-subtitle">
-          Test pre-incident scenario parameters against trained historical NTSB patterns in real-time.
+          Test pre-incident scenario parameters against trained historical NTSB patterns in real-time. Know the severity. Understand the why.
         </p>
         <a href="#hero" class="btn btn-primary">Analyze a scenario →</a>
       </div>
