@@ -8,8 +8,9 @@
 
 **Product & Sequential SaaS Checkout**:
 - **Strictly Sequential Checkout Flow**: Engineered a clean, 1-state-at-a-time checkout modal (`Checkout Form` ➔ `Processing Payment...` ➔ `Payment Successful` ➔ `AeroIntel Intelligence Unlocked`). Form, processing, and success screens are strictly separated to prevent visual clutter.
-- **Multi-Method Indian SaaS Checkout**: Supports compact selectable payment tabs (`⚡ UPI`, `💳 Card`, `🏦 Net Banking`, `👛 Wallet`) tailored for ₹499/month subscription pricing, defaulting to UPI ID input.
-- **1 Free Analysis Limit**: Every new user receives exactly 1 free scenario analysis showing high-level severity (`FATAL`, `SERIOUS`, `MINOR`, `NONE`), while factor intelligence remains locked (`Want to know why?`). Attempting a 2nd analysis triggers a persistent subscription upgrade lock.
+- **Two Commercial Pricing Options**: Features **Monthly Subscription (₹129 / month)** and **Lifetime Access (₹649 one-time - BEST VALUE)**.
+- **Multi-Method Indian SaaS Checkout**: Supports compact selectable payment tabs (`⚡ UPI`, `💳 Card`, `🏦 Net Banking`, `👛 Wallet`) for ₹129/mo and ₹649 Lifetime plans, defaulting to UPI ID input.
+- **1 Free Analysis Limit (Result-Only)**: Every new user receives 1 free scenario analysis displaying ONLY the predicted severity (`FATAL`, `SERIOUS`, `MINOR`, `NONE`). Model probability percentages, feature weights, and why factors remain strictly locked (`WANT TO KNOW WHY?`).
 - **Defensible Machine Learning Rigor**: A 58.5% accuracy on a 4-class imbalanced classification problem represents a **2.34x improvement over the 25.0% random baseline**, demonstrating honest empirical ML.
 - **Non-Causation Framing**: Strictly formatted all explanations as *"Features influencing model assessment"* and *"Model feature importance"*, guarding against invalid causal claims.
 

@@ -629,11 +629,6 @@ function analyzeIncidentScenario(input) {
 
 /**
  * Handle UI Interaction for Scenario Card & Telemetry Sync
- */
-/**
- * Handle UI Interaction for Scenario Card & Freemium Premium Lock
- */
-/**
  * Handle UI Interaction for Scenario Card, Free Limit & Checkout Flow
  */
 function initScenarioAnalyzer() {
@@ -643,7 +638,6 @@ function initScenarioAnalyzer() {
   const btnReset = document.getElementById('btn-reset');
   const btnUnlock = document.getElementById('btn-unlock-intelligence');
   const btnLimitPricing = document.getElementById('btn-limit-pricing');
-  const btnPricingCheckout = document.getElementById('btn-pricing-checkout');
 
   if (!form || !resultView) return;
 
@@ -661,7 +655,7 @@ function initScenarioAnalyzer() {
 
     if (!isUnlocked) {
       // Free trial is expired -> prompt checkout!
-      openCheckoutModal();
+      openCheckoutModal('monthly');
     } else {
       // Paid user -> allow re-analyzing scenarios freely!
       resultView.classList.remove('active');
@@ -675,28 +669,31 @@ function initScenarioAnalyzer() {
       if (isUnlocked) {
         document.getElementById('premium-lock-wrapper')?.scrollIntoView({ behavior: 'smooth' });
       } else {
-        openCheckoutModal();
+        openCheckoutModal('monthly');
       }
     });
   }
 
   if (btnLimitPricing) {
     btnLimitPricing.addEventListener('click', () => {
-      openCheckoutModal();
+      openCheckoutModal('monthly');
     });
   }
 
-  if (btnPricingCheckout) {
-    btnPricingCheckout.addEventListener('click', () => {
-      openCheckoutModal();
+  // Plan Selection Buttons in Pricing Section
+  document.querySelectorAll('.btn-choose-plan').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const plan = btn.getAttribute('data-plan') || 'monthly';
+      openCheckoutModal(plan);
     });
-  }
+  });
 
   const btnResetDemo = document.getElementById('btn-reset-demo-state');
   if (btnResetDemo) {
     btnResetDemo.addEventListener('click', () => {
       localStorage.removeItem('aeroIntel_isPremiumUnlocked');
       localStorage.removeItem('aeroIntel_freeAnalysisUsed');
+      localStorage.removeItem('aeroIntel_selectedPlanName');
       
       const resultView = document.getElementById('result-view');
       const form = document.getElementById('scenario-form');
@@ -754,7 +751,7 @@ function handleAnalysisSubmission() {
   const freeUsed = localStorage.getItem('aeroIntel_freeAnalysisUsed') === 'true';
 
   if (!isUnlocked && freeUsed) {
-    openCheckoutModal();
+    openCheckoutModal('monthly');
     return;
   }
 
@@ -798,39 +795,11 @@ function updateResultView(result) {
   const lockBadge = document.getElementById('premium-badge-tag');
   const btnUnlock = document.getElementById('btn-unlock-intelligence');
   const btnReset = document.getElementById('btn-reset');
-
-  const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
-  
-  const sev = result.predictedSeverity.toLowerCase();
-  banner.className = `severity-banner ${sev}`;
-  valueEl.textContent = result.predictedSeverity;
-
-  const probs = result.probabilities;
-  const highestProb = probs[result.predictedSeverity.charAt(0) + result.predictedSeverity.slice(1).toLowerCase()] || 50;
-
-  if (chipEl) {
-    chipEl.textContent = `${highestProb}% Model Probability`;
-  }
-
-  setProbRow('fatal', probs.Fatal);
-  setProbRow('serious', probs.Serious);
-  setProbRow('minor', probs.Minor);
-  setProbRow('none', probs.None);
-
-  renderWhySection(result.features);
-
-function updateResultView(result) {
-  const banner = document.getElementById('severity-banner');
-  const valueEl = document.getElementById('severity-value');
-  const chipEl = document.getElementById('severity-confidence-chip');
-  const lockWrapper = document.getElementById('premium-lock-wrapper');
-  const lockTitle = document.getElementById('premium-lock-title');
-  const lockBadge = document.getElementById('premium-badge-tag');
-  const btnUnlock = document.getElementById('btn-unlock-intelligence');
-  const btnReset = document.getElementById('btn-reset');
   const unlockedBanner = document.getElementById('premium-unlocked-banner');
+  const unlockedPlanNameEl = document.getElementById('unlocked-plan-name');
 
   const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+  const selectedPlanName = localStorage.getItem('aeroIntel_selectedPlanName') || 'AeroIntel Intelligence — Monthly';
   
   const sev = result.predictedSeverity.toLowerCase();
   banner.className = `severity-banner ${sev}`;
@@ -841,6 +810,12 @@ function updateResultView(result) {
 
   if (chipEl) {
     chipEl.textContent = `${highestProb}% Model Probability`;
+    // FREE USER: Hide model probability percentage chip unless unlocked!
+    if (isUnlocked) {
+      chipEl.classList.remove('hidden');
+    } else {
+      chipEl.classList.add('hidden');
+    }
   }
 
   setProbRow('fatal', probs.Fatal);
@@ -860,6 +835,7 @@ function updateResultView(result) {
     if (btnUnlock) btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
     if (btnReset) btnReset.innerHTML = '← Re-analyze Scenario';
     if (unlockedBanner) unlockedBanner.classList.remove('hidden');
+    if (unlockedPlanNameEl) unlockedPlanNameEl.textContent = `${selectedPlanName} Active`;
     
     setTimeout(() => {
       document.querySelectorAll('.prob-fill').forEach((el) => {
@@ -872,7 +848,7 @@ function updateResultView(result) {
       lockWrapper.classList.add('locked');
       lockWrapper.classList.remove('unlocked');
     }
-    if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔒</span> Want to know why?';
+    if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔒</span> WANT TO KNOW WHY?';
     if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
     if (btnUnlock) btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
     if (btnReset) btnReset.innerHTML = '🔒 Free Trial Expired — Unlock Intelligence to Re-Analyze →';
@@ -952,7 +928,9 @@ function initCheckoutModal() {
     document.getElementById('checkout-state-processing')?.classList.add('hidden');
     document.getElementById('checkout-state-success')?.classList.add('hidden');
 
-    // Update UI and reveal unlocked insights
+    const resultView = document.getElementById('result-view');
+    const form = document.getElementById('scenario-form');
+
     const inputData = {
       weather: document.getElementById('field-weather').value,
       purpose: document.getElementById('field-purpose').value,
@@ -967,23 +945,54 @@ function initCheckoutModal() {
     const result = analyzeIncidentScenario(inputData);
     updateResultView(result);
 
+    if (form) form.classList.add('hidden');
+    if (resultView) resultView.classList.add('active');
+
     checkFreeLimitUI();
 
     document.getElementById('scenario-card')?.scrollIntoView({ behavior: 'smooth' });
   });
 }
 
-function openCheckoutModal() {
+function openCheckoutModal(selectedPlan = 'monthly') {
   const modal = document.getElementById('checkout-modal');
-  if (modal) {
-    // Reset to form state
-    document.getElementById('checkout-state-form')?.classList.remove('hidden');
-    document.getElementById('checkout-state-processing')?.classList.add('hidden');
-    document.getElementById('checkout-state-success')?.classList.add('hidden');
+  if (!modal) return;
 
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
+  const planTitle = modal.querySelector('.checkout-title');
+  const planSub = modal.querySelector('.checkout-sub');
+  const priceTag = modal.querySelector('.checkout-price-tag');
+  const btnPayUpi = document.getElementById('btn-pay-upi');
+  const btnPayCard = document.getElementById('btn-pay-card');
+  const btnPayNet = document.getElementById('btn-pay-netbanking');
+  const btnPayWallet = document.getElementById('btn-pay-wallet');
+
+  if (selectedPlan === 'lifetime') {
+    if (planTitle) planTitle.textContent = 'AeroIntel Intelligence — Lifetime';
+    if (planSub) planSub.textContent = 'One-time payment for perpetual access to all intelligence features.';
+    if (priceTag) priceTag.innerHTML = '₹649 <span>one-time</span>';
+    if (btnPayUpi) btnPayUpi.textContent = 'Pay ₹649 →';
+    if (btnPayCard) btnPayCard.textContent = 'Pay ₹649 →';
+    if (btnPayNet) btnPayNet.textContent = 'Continue to Pay ₹649 →';
+    if (btnPayWallet) btnPayWallet.textContent = 'Pay ₹649 →';
+    localStorage.setItem('aeroIntel_selectedPlanName', 'AeroIntel Intelligence — Lifetime');
+  } else {
+    if (planTitle) planTitle.textContent = 'AeroIntel Intelligence — Monthly';
+    if (planSub) planSub.textContent = 'Unlock advanced aviation intelligence and deeper model insights.';
+    if (priceTag) priceTag.innerHTML = '₹129 <span>/ month</span>';
+    if (btnPayUpi) btnPayUpi.textContent = 'Pay ₹129 →';
+    if (btnPayCard) btnPayCard.textContent = 'Pay ₹129 →';
+    if (btnPayNet) btnPayNet.textContent = 'Continue to Pay ₹129 →';
+    if (btnPayWallet) btnPayWallet.textContent = 'Pay ₹129 →';
+    localStorage.setItem('aeroIntel_selectedPlanName', 'AeroIntel Intelligence — Monthly');
   }
+
+  // Reset to form state
+  document.getElementById('checkout-state-form')?.classList.remove('hidden');
+  document.getElementById('checkout-state-processing')?.classList.add('hidden');
+  document.getElementById('checkout-state-success')?.classList.add('hidden');
+
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
 }
 
 function updateConsoleTelemetry(inputData, result) {

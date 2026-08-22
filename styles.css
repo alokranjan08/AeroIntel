@@ -2374,48 +2374,104 @@ select option {
   align-self: flex-start;
 }
 
-/* Dedicated Pricing Section */
-.pricing-card-container {
-  max-width: 680px;
+/* Pricing 2-Card Layout (Monthly ₹129 & Lifetime ₹649 Best Value) */
+.pricing-two-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 920px;
   margin: 0 auto;
 }
 
-.pricing-standalone-card {
-  padding: 2.25rem;
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  background: linear-gradient(135deg, rgba(92, 6, 50, 0.6) 0%, rgba(15, 3, 14, 0.85) 100%);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.15);
+@media (max-width: 768px) {
+  .pricing-two-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pricing-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  background: rgba(20, 4, 16, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  transition: var(--transition-glass);
+}
+
+.pricing-plan-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.pricing-plan-card.best-value-card {
+  background: linear-gradient(135deg, rgba(55, 4, 32, 0.9) 0%, rgba(18, 3, 14, 0.95) 100%);
+  border: 2px solid var(--qatar-gold);
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.25);
+}
+
+.best-value-ribbon {
+  position: absolute;
+  top: -14px;
+  right: 20px;
+  background: linear-gradient(135deg, #D4AF37 0%, #AA7C11 100%);
+  color: #0A0209;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 900;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.05em;
+}
+
+.gold-badge {
+  background: rgba(212, 175, 55, 0.2) !important;
+  color: var(--qatar-gold) !important;
+  border-color: var(--qatar-gold) !important;
+}
+
+.gold-price {
+  color: var(--qatar-gold) !important;
+}
+
+.gold-check {
+  color: var(--qatar-gold) !important;
 }
 
 .pricing-card-header {
-  text-align: center;
-  margin-bottom: 1.75rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
 }
 
 .plan-title {
-  font-size: 1.75rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--text-white);
   margin-top: 0.5rem;
+  line-height: 1.2;
 }
 
 .plan-price-large {
-  font-size: 2.75rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  color: var(--qatar-gold);
-  margin: 0.5rem 0;
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  color: var(--text-white);
+  margin: 0.4rem 0;
 }
 
 .plan-price-large .period {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-muted);
 }
 
 .plan-subtitle {
-  font-size: 0.9rem;
+  font-size: 0.825rem;
   color: var(--text-slate);
+  line-height: 1.4;
 }
 
 .pricing-features-grid {
