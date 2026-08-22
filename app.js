@@ -657,10 +657,16 @@ function initScenarioAnalyzer() {
 
   btnReset.addEventListener('click', (e) => {
     e.preventDefault();
-    resultView.classList.remove('active');
-    
-    // Check if free limit reached
-    checkFreeLimitUI();
+    const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+
+    if (!isUnlocked) {
+      // Free trial is expired -> prompt checkout!
+      openCheckoutModal();
+    } else {
+      // Paid user -> allow re-analyzing scenarios freely!
+      resultView.classList.remove('active');
+      form.classList.remove('hidden');
+    }
   });
 
   if (btnUnlock) {
@@ -706,7 +712,7 @@ function checkFreeLimitUI() {
     if (limitBanner) limitBanner.classList.remove('hidden');
     if (form) form.classList.add('hidden');
     if (statusBadge) {
-      statusBadge.textContent = 'FREE LIMIT REACHED';
+      statusBadge.textContent = 'FREE TRIAL EXPIRED';
       statusBadge.style.color = '#EF4444';
       statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
     }
@@ -714,7 +720,7 @@ function checkFreeLimitUI() {
     if (limitBanner) limitBanner.classList.add('hidden');
     if (form) form.classList.remove('hidden');
     if (statusBadge) {
-      statusBadge.textContent = '1 FREE ANALYSIS';
+      statusBadge.textContent = '1 FREE TRIAL';
     }
   }
 }
@@ -724,7 +730,7 @@ function handleAnalysisSubmission() {
   const freeUsed = localStorage.getItem('aeroIntel_freeAnalysisUsed') === 'true';
 
   if (!isUnlocked && freeUsed) {
-    checkFreeLimitUI();
+    openCheckoutModal();
     return;
   }
 
@@ -767,6 +773,7 @@ function updateResultView(result) {
   const lockTitle = document.getElementById('premium-lock-title');
   const lockBadge = document.getElementById('premium-badge-tag');
   const btnUnlock = document.getElementById('btn-unlock-intelligence');
+  const btnReset = document.getElementById('btn-reset');
 
   const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
   
@@ -796,6 +803,7 @@ function updateResultView(result) {
     if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔓</span> WHY THIS ASSESSMENT?';
     if (lockBadge) lockBadge.textContent = 'PREMIUM UNLOCKED';
     if (btnUnlock) btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
+    if (btnReset) btnReset.innerHTML = '← Re-analyze Scenario';
     
     setTimeout(() => {
       document.querySelectorAll('.prob-fill').forEach((el) => {
@@ -811,6 +819,7 @@ function updateResultView(result) {
     if (lockTitle) lockTitle.innerHTML = '<span class="lock-icon">🔒</span> Want to know why?';
     if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
     if (btnUnlock) btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
+    if (btnReset) btnReset.innerHTML = '🔒 Free Trial Expired — Unlock Intelligence to Re-Analyze →';
   }
 }
 
