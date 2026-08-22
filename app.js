@@ -834,6 +834,25 @@ function initCheckoutModal() {
   backdrop?.addEventListener('click', closeCheckout);
   closeBtn?.addEventListener('click', closeCheckout);
 
+  // Tab switching for payment methods
+  const payTabs = modal.querySelectorAll('.pay-tab');
+  payTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      payTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const targetMethod = tab.getAttribute('data-pay-method');
+      modal.querySelectorAll('.pay-method-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+
+      const activePanel = document.getElementById(`pay-panel-${targetMethod}`);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+    });
+  });
+
   checkoutForm?.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -841,13 +860,14 @@ function initCheckoutModal() {
     const stateProcessing = document.getElementById('checkout-state-processing');
     const stateSuccess = document.getElementById('checkout-state-success');
 
-    // Step 1 -> Step 2: Processing state
+    // STEP 1 -> STEP 2: SHOW ONLY PROCESSING
     stateForm.classList.add('hidden');
     stateProcessing.classList.remove('hidden');
+    stateSuccess.classList.add('hidden');
 
     // Simulate 1.2s gateway processing delay
     setTimeout(() => {
-      // Step 2 -> Step 3: Success state
+      // STEP 2 -> STEP 3: SHOW ONLY SUCCESS
       stateProcessing.classList.add('hidden');
       stateSuccess.classList.remove('hidden');
 
@@ -863,6 +883,7 @@ function initCheckoutModal() {
 
     // Reset checkout form states for next demo loop
     document.getElementById('checkout-state-form')?.classList.remove('hidden');
+    document.getElementById('checkout-state-processing')?.classList.add('hidden');
     document.getElementById('checkout-state-success')?.classList.add('hidden');
 
     // Update UI and reveal unlocked insights
