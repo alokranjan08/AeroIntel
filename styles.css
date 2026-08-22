@@ -2186,8 +2186,46 @@ select option {
 }
 
 .premium-lock-wrapper.unlocked .premium-cta-card {
+  display: none !important;
+}
+
+.premium-unlocked-banner {
+  padding: 1.25rem;
   background: rgba(16, 185, 129, 0.12);
-  border-top-color: rgba(16, 185, 129, 0.35);
+  border-top: 1px solid rgba(16, 185, 129, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.premium-unlocked-banner.hidden {
+  display: none !important;
+}
+
+.unlocked-banner-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10B981;
+  color: #10B981;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.unlocked-banner-text strong {
+  display: block;
+  font-size: 0.925rem;
+  color: #10B981;
+}
+
+.unlocked-banner-text p {
+  font-size: 0.775rem;
+  color: var(--text-slate);
+  margin-top: 0.15rem;
 }
 
 .premium-tagline-box {

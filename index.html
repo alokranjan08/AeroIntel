@@ -74,7 +74,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
             </svg>
-            1 free analysis included • Trained on 39,017 U.S. NTSB records.
+            1 free trial analysis included • Trained on 39,017 U.S. NTSB records.
           </span>
         </div>
       </div>
@@ -88,16 +88,16 @@
             </svg>
             Pre-Incident Scenario
           </h2>
-          <span class="badge-tag" id="scenario-status-badge">1 FREE ANALYSIS</span>
+          <span class="badge-tag" id="scenario-status-badge">1 FREE TRIAL</span>
         </div>
 
         <!-- Limit Reached Banner (Hidden by default, shown on 2nd attempt before checkout) -->
         <div class="free-limit-banner hidden" id="free-limit-banner">
           <div class="limit-banner-icon">🔒</div>
           <div class="limit-banner-text">
-            <strong>Your 1 free analysis has been used.</strong>
-            <p>Unlock AeroIntel Intelligence to continue analyzing scenarios and access deeper factor insights.</p>
-            <button type="button" class="btn btn-primary btn-sm" id="btn-limit-pricing">View Pricing & Plans →</button>
+            <strong>Your 1 free trial analysis has expired.</strong>
+            <p>Unlock AeroIntel Intelligence to re-analyze scenarios and access deeper factor insights.</p>
+            <button type="button" class="btn btn-primary btn-sm" id="btn-limit-pricing">Unlock AeroIntel Intelligence (₹499/mo) →</button>
           </div>
         </div>
 
@@ -185,7 +185,7 @@
         <!-- Result State (FREEMIUM PRODUCT EXPERIENCE) -->
         <div class="result-view" id="result-view">
           
-          <!-- CHANGE 1: FREE USER HIGH-LEVEL RESULT -->
+          <!-- FREE USER HIGH-LEVEL RESULT -->
           <div class="free-result-container">
             <div class="severity-banner serious" id="severity-banner">
               <span class="severity-label">PREDICTED INCIDENT SEVERITY</span>
@@ -194,7 +194,7 @@
             </div>
           </div>
 
-          <!-- CHANGE 2 & 3 & 4 & 5: PREMIUM LOCK & VALUE PROPOSITION -->
+          <!-- PREMIUM LOCK & VALUE PROPOSITION -->
           <div class="premium-lock-wrapper locked" id="premium-lock-wrapper">
             
             <div class="premium-lock-header">
@@ -261,7 +261,7 @@
 
             </div> <!-- /.premium-blurred-content -->
 
-            <!-- PREMIUM CONVERSION OVERLAY / CTA BOX -->
+            <!-- PREMIUM CONVERSION OVERLAY / PAYWALL CTA BOX (Visible when locked) -->
             <div class="premium-cta-card" id="premium-cta-card">
               <div class="premium-tagline-box">
                 <h4 class="premium-main-heading">Know the severity. Understand the why.</h4>
@@ -312,6 +312,15 @@
                 </button>
               </div>
             </div> <!-- /.premium-cta-card -->
+
+            <!-- UNLOCKED ACTIVE SUCCESS BANNER (Shown only after simulated payment) -->
+            <div class="premium-unlocked-banner hidden" id="premium-unlocked-banner">
+              <div class="unlocked-banner-icon">🔓</div>
+              <div class="unlocked-banner-text">
+                <strong>AeroIntel Intelligence Active</strong>
+                <p>All factor weights, class probability distributions, and historical comparisons are unlocked for unlimited scenario analysis.</p>
+              </div>
+            </div>
 
           </div> <!-- /.premium-lock-wrapper -->
 
@@ -1143,9 +1152,16 @@ print(<span class="code-string">f"Cleaned U.S. incidents: {len(df):,} records"</
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary btn-full btn-get-started-pricing" id="btn-pricing-checkout">
-            Get AeroIntel Intelligence →
-          </button>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: center;">
+            <button type="button" class="btn btn-primary btn-full btn-get-started-pricing" id="btn-pricing-checkout">
+              Get AeroIntel Intelligence →
+            </button>
+
+            <!-- Reset Demo Helper Button for Evaluators -->
+            <button type="button" class="btn btn-outline btn-sm" id="btn-reset-demo-state" style="margin-top: 0.5rem; font-size: 0.75rem; border-color: rgba(212, 175, 55, 0.3); color: var(--text-slate);">
+              🔄 Reset Demo State (Test 1 Free Trial Again)
+            </button>
+          </div>
         </div>
       </div>
 

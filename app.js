@@ -691,6 +691,30 @@ function initScenarioAnalyzer() {
       openCheckoutModal();
     });
   }
+
+  const btnResetDemo = document.getElementById('btn-reset-demo-state');
+  if (btnResetDemo) {
+    btnResetDemo.addEventListener('click', () => {
+      localStorage.removeItem('aeroIntel_isPremiumUnlocked');
+      localStorage.removeItem('aeroIntel_freeAnalysisUsed');
+      
+      const resultView = document.getElementById('result-view');
+      const form = document.getElementById('scenario-form');
+      if (resultView) resultView.classList.remove('active');
+      if (form) form.classList.remove('hidden');
+
+      checkFreeLimitUI();
+
+      const lockWrapper = document.getElementById('premium-lock-wrapper');
+      if (lockWrapper) {
+        lockWrapper.classList.add('locked');
+        lockWrapper.classList.remove('unlocked');
+      }
+
+      alert('Demo state reset! You now have 1 Free Trial Analysis available.');
+      document.getElementById('scenario-card')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 }
 
 function checkFreeLimitUI() {
@@ -795,6 +819,37 @@ function updateResultView(result) {
 
   renderWhySection(result.features);
 
+function updateResultView(result) {
+  const banner = document.getElementById('severity-banner');
+  const valueEl = document.getElementById('severity-value');
+  const chipEl = document.getElementById('severity-confidence-chip');
+  const lockWrapper = document.getElementById('premium-lock-wrapper');
+  const lockTitle = document.getElementById('premium-lock-title');
+  const lockBadge = document.getElementById('premium-badge-tag');
+  const btnUnlock = document.getElementById('btn-unlock-intelligence');
+  const btnReset = document.getElementById('btn-reset');
+  const unlockedBanner = document.getElementById('premium-unlocked-banner');
+
+  const isUnlocked = localStorage.getItem('aeroIntel_isPremiumUnlocked') === 'true';
+  
+  const sev = result.predictedSeverity.toLowerCase();
+  banner.className = `severity-banner ${sev}`;
+  valueEl.textContent = result.predictedSeverity;
+
+  const probs = result.probabilities;
+  const highestProb = probs[result.predictedSeverity.charAt(0) + result.predictedSeverity.slice(1).toLowerCase()] || 50;
+
+  if (chipEl) {
+    chipEl.textContent = `${highestProb}% Model Probability`;
+  }
+
+  setProbRow('fatal', probs.Fatal);
+  setProbRow('serious', probs.Serious);
+  setProbRow('minor', probs.Minor);
+  setProbRow('none', probs.None);
+
+  renderWhySection(result.features);
+
   if (isUnlocked) {
     if (lockWrapper) {
       lockWrapper.classList.remove('locked');
@@ -804,6 +859,7 @@ function updateResultView(result) {
     if (lockBadge) lockBadge.textContent = 'PREMIUM UNLOCKED';
     if (btnUnlock) btnUnlock.innerHTML = '✓ AeroIntel Intelligence Unlocked';
     if (btnReset) btnReset.innerHTML = '← Re-analyze Scenario';
+    if (unlockedBanner) unlockedBanner.classList.remove('hidden');
     
     setTimeout(() => {
       document.querySelectorAll('.prob-fill').forEach((el) => {
@@ -820,6 +876,7 @@ function updateResultView(result) {
     if (lockBadge) lockBadge.textContent = 'AEROINTEL PREMIUM';
     if (btnUnlock) btnUnlock.innerHTML = 'Unlock AeroIntel Intelligence →';
     if (btnReset) btnReset.innerHTML = '🔒 Free Trial Expired — Unlock Intelligence to Re-Analyze →';
+    if (unlockedBanner) unlockedBanner.classList.add('hidden');
   }
 }
 
